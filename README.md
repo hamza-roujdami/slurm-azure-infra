@@ -32,7 +32,17 @@ This repository contains Terraform configurations for deploying a Slurm HPC clus
 1. Azure subscription with quota for ND96asr_v4 VMs in France Central
 2. Terraform installed (version 1.0.0 or later)
 3. Azure CLI installed and configured
-4. SSH key pair for authentication
+4. SSH key pair for authentication:
+   ```bash
+   # Check if you already have an SSH key
+   ls -la ~/.ssh/id_rsa.pub
+   
+   # If no SSH key exists, generate a new one
+   ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+   
+   # Verify the key was created
+   cat ~/.ssh/id_rsa.pub
+   ```
 
 ## Getting Started
 
@@ -42,23 +52,33 @@ This repository contains Terraform configurations for deploying a Slurm HPC clus
    cd slurm-azure-infra
    ```
 
-2. Initialize Terraform:
+2. Set up your SSH key (if not done in prerequisites):
+   ```bash
+   # Generate SSH key if you haven't already
+   ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+   ```
+
+3. Initialize Terraform:
    ```bash
    cd terraform
    terraform init
    ```
 
-3. Create a `terraform.tfvars` file with your configuration:
-   ```hcl
-   cluster_name = "your-cluster-name"
-   admin_username = "your-admin-username"
-   # Add other variables as needed
+4. Create a `terraform.tfvars` file with your configuration:
+   ```bash
+   # Copy the example file
+   cp terraform.tfvars.example terraform.tfvars
+   
+   # Edit the file with your values, especially:
+   # - resource_group_name
+   # - admin_username
+   # - Verify ssh_public_key_path points to your public key (default: "~/.ssh/id_rsa.pub")
    ```
 
-4. Review and apply the configuration:
+5. Review and apply the configuration:
    ```bash
-   terraform plan
-   terraform apply
+   terraform plan    # Review the changes
+   terraform apply   # Apply the changes
    ```
 
 ## Security Considerations
@@ -67,6 +87,8 @@ This repository contains Terraform configurations for deploying a Slurm HPC clus
 - terraform.tfvars file is git-ignored to prevent accidental commit of sensitive data
 - Network security groups restrict access to necessary ports only
 - System-assigned managed identities are used for VM authentication
+- SSH key authentication is required for all VMs
+- Never commit private SSH keys to the repository
 
 ## Maintenance
 
