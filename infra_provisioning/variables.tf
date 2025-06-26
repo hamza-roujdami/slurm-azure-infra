@@ -5,9 +5,9 @@ variable "location" {
 }
 
 variable "resource_group_name" {
-  description = "Name of the Azure Resource Group"
+  description = "The name of the resource group."
   type        = string
-  default     = "rg-az-ai-infra"
+  default     = "rg-hpc-slurm-infra"
 }
 
 variable "name_prefix" {
